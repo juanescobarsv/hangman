@@ -41,7 +41,7 @@ h1 {
 }
 
 .figure-part {
-  display: none;
+  /* display: none; */
 }
 
 .wrong-letters-container {
