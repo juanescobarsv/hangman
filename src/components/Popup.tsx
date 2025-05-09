@@ -31,7 +31,7 @@ const Popup = ({
     finalMessage = "Congratulations! You won 🥳";
     finalMessageRevealWorld = `The correct country was: ${capitalize(
       selectedWord
-    )}`;
+    )} ${flag}`;
     playable = false;
   } else if (checkWin(correctLetters, wrongLetters, selectedWord) === "lose") {
     finalMessage = "Unfortunately you lost 🙂‍↔️";
