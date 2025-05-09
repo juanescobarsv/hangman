@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import { useEffect } from "react";
 import { checkWin } from "../helpers/helpers";
 
 function capitalize(str: string): string {

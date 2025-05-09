@@ -13,10 +13,11 @@ const App = () => {
   const [playable, setPlayable] = useState(true);
   const [words, setWords] = useState<CountryInfo[]>([]);
   const [selectedWord, setSelectedWord] = useState<string>("");
-  const [region, setRegion] = useState<string>("");
+  // const [region, setRegion] = useState<string>("");
+  // TO BE USED LATER WHEN SELECTING CONTINENTS
   const [flag, setFlag] = useState<string>("");
-  const [correctLetters, setCorrectLetters] = useState([]);
-  const [wrongLetters, setWrongLetters] = useState([]);
+  const [correctLetters, setCorrectLetters] = useState<string[]>([]);
+  const [wrongLetters, setWrongLetters] = useState<string[]>([]);
   const [showNotifcation, setShowNotifcation] = useState(false);
 
   const loadWords = async () => {
@@ -27,7 +28,7 @@ const App = () => {
     const selected = countries[random];
 
     setSelectedWord(selected.name.toLowerCase());
-    setRegion(selected.region);
+    // setRegion(selected.region);
     setFlag(selected.flag);
   };
 
@@ -44,8 +45,7 @@ const App = () => {
 
         if (selectedWord.includes(letter)) {
           if (!correctLetters.includes(letter)) {
-            // setCorrectLetters((correctLetters) => [...correctLetters, letter]);
-            setCorrectLetters((currentLetters) => [...currentLetters, letter]);
+            setCorrectLetters((correctLetters) => [...correctLetters, letter]);
           } else {
             show(setShowNotifcation);
           }
@@ -62,7 +62,7 @@ const App = () => {
     window.addEventListener("keydown", handleKeydown);
 
     return () => window.removeEventListener("keydown", handleKeydown);
-  }, [correctLetters, wrongLetters, playable]);
+  }, [selectedWord, correctLetters, wrongLetters, playable]);
 
   function playAgain() {
     if (words.length === 0) return;
@@ -75,7 +75,8 @@ const App = () => {
     const newCountry = words[random];
 
     setSelectedWord(newCountry.name.toLowerCase());
-    setRegion(newCountry.region);
+    // setRegion(newCountry.region);
+    // TO BE USED LATER WHEN SELECTING CONTINENTS
     setFlag(newCountry.flag);
   }
 
