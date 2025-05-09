@@ -5,11 +5,15 @@ export function showNotification(setter) {
   }, 2000);
 }
 
-export function checkWin(correct, wrong, word) {
-  let status = "win";
+export function checkWin(
+  correct: string[],
+  wrong: string[],
+  word: string
+): "win" | "lose" | "" {
+  let status: "win" | "lose" | "" = "win";
 
   word.split("").forEach((letter) => {
-    if (!correct.includes(letter)) {
+    if (letter !== " " && !correct.includes(letter.toLowerCase())) {
       status = "";
     }
   });
