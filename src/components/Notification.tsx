@@ -1,4 +1,4 @@
-const Notification = ({ showNotification }) => {
+const Notification = ({ showNotification }: { showNotification: boolean }) => {
   return (
     <div
       className={`notification-container ${showNotification ? "show" : ""}}`}

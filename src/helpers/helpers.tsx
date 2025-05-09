@@ -1,4 +1,6 @@
-export function showNotification(setter) {
+import { SetStateAction } from "react";
+
+export function showNotification(setter: { (value: SetStateAction<boolean>): void; (value: SetStateAction<boolean>): void; (arg0: boolean): void; }) {
   setter(true);
   setTimeout(() => {
     setter(false);

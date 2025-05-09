@@ -1,4 +1,4 @@
-const Figure = ({ wrongLetters }) => {
+const Figure = ({ wrongLetters }: { wrongLetters: string[] }) => {
   const errors = wrongLetters.length;
 
   return (

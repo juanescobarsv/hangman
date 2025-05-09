@@ -15,6 +15,13 @@ const Popup = ({
   setPlayable,
   playAgain,
   flag,
+}: {
+  correctLetters: string[];
+  wrongLetters: string[];
+  selectedWord: string;
+  setPlayable: React.Dispatch<React.SetStateAction<boolean>>;
+  playAgain: () => void;
+  flag: string;
 }) => {
   let finalMessage = "";
   let finalMessageRevealWorld = "";
