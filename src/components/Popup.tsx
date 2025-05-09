@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import { checkWin } from "../helpers/helpers";
 
-export function capitalize(str: string): string {
+function capitalize(str: string): string {
   return str
     .split(" ")
     .map((word) => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
@@ -14,22 +14,23 @@ const Popup = ({
   selectedWord,
   setPlayable,
   playAgain,
+  flag,
 }) => {
   let finalMessage = "";
   let finalMessageRevealWorld = "";
   let playable = true;
 
   if (checkWin(correctLetters, wrongLetters, selectedWord) === "win") {
-    finalMessage = "Congratulations! You won 😮";
-    finalMessageRevealWorld = `The correct word was: ${capitalize(
+    finalMessage = "Congratulations! You won 🥳";
+    finalMessageRevealWorld = `The correct country was: ${capitalize(
       selectedWord
     )}`;
     playable = false;
   } else if (checkWin(correctLetters, wrongLetters, selectedWord) === "lose") {
     finalMessage = "Unfortunately you lost 🙂‍↔️";
-    finalMessageRevealWorld = `The correct word was: ${capitalize(
+    finalMessageRevealWorld = `The correct country was: ${capitalize(
       selectedWord
-    )}`;
+    )} ${flag}`;
     playable = false;
   }
 

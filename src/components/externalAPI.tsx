@@ -1,17 +1,26 @@
 import axios from "axios";
 
-const fetchCountries = async (): Promise<string[]> => {
+export interface CountryInfo {
+  name: string;
+  region: string;
+  flag: string;
+}
+
+export const fetchCountries = async (): Promise<CountryInfo[]> => {
   try {
-    const response = await axios.get("https://api.first.org/data/v1/countries");
-    const countryData = response.data.data;
-    const countryNames = Object.values(countryData).map(
-      (entry: any) => entry.country
+    const response = await axios.get(
+      "https://restcountries.com/v3.1/all?fields=name,continent,flag"
     );
-    return countryNames;
+    const countryData = response.data;
+    const countryList: CountryInfo[] = countryData.map((entry: any) => ({
+      name: entry.name?.common ?? "Unknown",
+      region: entry.continents?.[0] ?? "Unknown",
+      flag: entry.flag ?? "🏳️",
+    }));
+
+    return countryList;
   } catch (error) {
     console.error("Failed to fetch countries: ", error);
     return [];
   }
 };
-
-export default fetchCountries;
