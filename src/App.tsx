@@ -3,23 +3,30 @@ import Header from "./components/Header";
 import Figure from "./components/Figure";
 import WrongLetters from "./components/WrongLetters";
 import { Word, words } from "./components/Word";
+import fetchCountries from "./components/externalAPI";
 import Popup from "./components/Popup";
 import Notification from "./components/Notification";
 import { showNotification as show } from "./helpers/helpers";
 import "./App.css";
 
-// let selectedWord = words[Math.floor(Math.random() * words.length)];
-
 const App = () => {
   const [playable, setPlayable] = useState(true);
-  const [selectedWord, setSelectedWord] = useState(() =>
-    words[Math.floor(Math.random() * words.length)]
-      .replace(/\s+/g, "")
-      .toLowerCase()
-  );
+  const [words, setWords] = useState<string[]>([]);
+  const [selectedWord, setSelectedWord] = useState<string>("");
   const [correctLetters, setCorrectLetters] = useState([]);
   const [wrongLetters, setWrongLetters] = useState([]);
   const [showNotifcation, setShowNotifcation] = useState(false);
+
+  useEffect(() => {
+    const loadWords = async () => {
+      const countries = await fetchCountries();
+      setWords(countries);
+
+      const random = Math.floor(Math.random() * countries.length);
+      setSelectedWord(countries[random]);
+    };
+    loadWords();
+  }, []);
 
   useEffect(() => {
     const handleKeydown = (event) => {
@@ -38,7 +45,6 @@ const App = () => {
         } else {
           if (!wrongLetters.includes(letter)) {
             setWrongLetters((wrongLetters) => [...wrongLetters, letter]);
-            // setWrongLetters((currentLetters) => [...currentLetters, letter]);
           } else {
             show(setShowNotifcation);
           }
@@ -52,6 +58,8 @@ const App = () => {
   }, [correctLetters, wrongLetters, playable]);
 
   function playAgain() {
+    if (words.length === 0) return;
+
     setPlayable(true);
     setCorrectLetters([]);
     setWrongLetters([]);
@@ -78,7 +86,7 @@ const App = () => {
         setPlayable={setPlayable}
         playAgain={playAgain}
       />
-      <Notification showNotifcation={showNotifcation} />
+      <Notification showNotification={showNotifcation} />
     </>
   );
 };

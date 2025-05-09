@@ -13,5 +13,3 @@ export function Word({ selectedWord, correctLetters }) {
     </div>
   );
 }
-
-export const words = ["Countries", "Animals", "Cities", "Test"];
