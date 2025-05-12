@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 import Header from "./components/Header";
 import Figure from "./components/Figure";
 import WrongLetters from "./components/WrongLetters";
@@ -11,6 +11,7 @@ import "./App.css";
 
 const App = () => {
   const [playable, setPlayable] = useState(true);
+  const inputRef = useRef<HTMLInputElement>(null);
   const [words, setWords] = useState<CountryInfo[]>([]);
   const [selectedWord, setSelectedWord] = useState<string>("");
   // const [region, setRegion] = useState<string>("");
@@ -36,33 +37,39 @@ const App = () => {
     loadWords();
   }, []);
 
-  useEffect(() => {
-    const handleKeydown = (event: { key: string; keyCode: number }) => {
-      const { key, keyCode } = event;
-
-      if (playable && keyCode >= 65 && keyCode <= 90) {
-        const letter = key;
-
-        if (selectedWord.includes(letter)) {
-          if (!correctLetters.includes(letter)) {
-            setCorrectLetters((correctLetters) => [...correctLetters, letter]);
-          } else {
-            show(setShowNotifcation);
-          }
+  const processLetter = useCallback(
+    (letter: string) => {
+      if (selectedWord.includes(letter)) {
+        if (!correctLetters.includes(letter)) {
+          setCorrectLetters((prev) => [...prev, letter]);
         } else {
-          if (!wrongLetters.includes(letter)) {
-            setWrongLetters((wrongLetters) => [...wrongLetters, letter]);
-          } else {
-            show(setShowNotifcation);
-          }
+          show(setShowNotifcation);
         }
+      } else {
+        if (!wrongLetters.includes(letter)) {
+          setWrongLetters((prev) => [...prev, letter]);
+        } else {
+          show(setShowNotifcation);
+        }
+      }
+    },
+    [selectedWord, correctLetters, wrongLetters]
+  );
+
+  useEffect(() => {
+    const handleKeydown = (event: KeyboardEvent) => {
+      const { key } = event;
+
+      if (playable && /^[a-zA-Z]$/.test(key)) {
+        processLetter(key.toLowerCase());
       }
     };
 
     window.addEventListener("keydown", handleKeydown);
+    inputRef.current?.focus();
 
     return () => window.removeEventListener("keydown", handleKeydown);
-  }, [selectedWord, correctLetters, wrongLetters, playable]);
+  }, [playable, processLetter]);
 
   function playAgain() {
     if (words.length === 0) return;
@@ -87,6 +94,23 @@ const App = () => {
         <Figure wrongLetters={wrongLetters} />
         <WrongLetters wrongLetters={wrongLetters} />
         <Word selectedWord={selectedWord} correctLetters={correctLetters} />
+        <input
+          ref={inputRef}
+          type="text"
+          maxLength={1}
+          onChange={(e) => {
+            const letter = e.target.value.toLowerCase();
+            if (playable && /^[a-z]$/.test(letter)) {
+              processLetter(letter);
+            }
+            e.target.value = "";
+          }}
+          style={{
+            position: "absolute",
+            opacity: 0,
+            pointerEvents: "none",
+          }}
+        />
       </div>
       <Popup
         correctLetters={correctLetters}
