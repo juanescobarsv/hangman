@@ -5,8 +5,8 @@ import WrongLetters from "./components/WrongLetters";
 import Word from "./components/Word";
 import { fetchCountries, CountryInfo } from "./components/externalAPI";
 import Popup from "./components/Popup";
-import Notification from "./components/Notification";
-import { showNotification as show } from "./helpers/helpers";
+// import Notification from "./components/Notification";
+// import { showNotification as show } from "./helpers/helpers";
 import "./App.css";
 
 const App = () => {
@@ -19,7 +19,7 @@ const App = () => {
   const [flag, setFlag] = useState<string>("");
   const [correctLetters, setCorrectLetters] = useState<string[]>([]);
   const [wrongLetters, setWrongLetters] = useState<string[]>([]);
-  const [showNotifcation, setShowNotifcation] = useState(false);
+  // const [showNotifcation, setShowNotifcation] = useState(false);
 
   const loadWords = async () => {
     const countries = await fetchCountries();
@@ -43,14 +43,14 @@ const App = () => {
       if (selectedWord.includes(letter)) {
         if (!correctLetters.includes(letter)) {
           setCorrectLetters((prev) => [...prev, letter]);
-        } else {
-          show(setShowNotifcation);
+          // } else {
+          //   show(setShowNotifcation);
         }
       } else {
         if (!wrongLetters.includes(letter)) {
           setWrongLetters((prev) => [...prev, letter]);
-        } else {
-          show(setShowNotifcation);
+          // } else {
+          //   show(setShowNotifcation);
         }
       }
     },
@@ -91,27 +91,32 @@ const App = () => {
   return (
     <>
       <Header />
+      <input
+        ref={inputRef}
+        type="text"
+        maxLength={1}
+        onChange={(e) => {
+          const letter = e.target.value.toLowerCase();
+          if (playable && /^[a-z]$/.test(letter)) {
+            processLetter(letter);
+          }
+          e.target.value = "";
+        }}
+        style={{
+          // position: "absolute",
+          bottom: 10,
+          left: 10,
+          width: 40,
+          height: 40,
+          opacity: 0.5,
+          zIndex: 10,
+        }}
+        autoFocus
+      />
       <div className="game-container">
         <Figure wrongLetters={wrongLetters} />
         <WrongLetters wrongLetters={wrongLetters} />
         <Word selectedWord={selectedWord} correctLetters={correctLetters} />
-        <input
-          ref={inputRef}
-          type="text"
-          maxLength={1}
-          onChange={(e) => {
-            const letter = e.target.value.toLowerCase();
-            if (playable && /^[a-z]$/.test(letter)) {
-              processLetter(letter);
-            }
-            e.target.value = "";
-          }}
-          style={{
-            position: "absolute",
-            opacity: 0,
-            pointerEvents: "none",
-          }}
-        />
       </div>
       <Popup
         correctLetters={correctLetters}
@@ -121,7 +126,7 @@ const App = () => {
         setPlayable={setPlayable}
         playAgain={playAgain}
       />
-      <Notification showNotification={showNotifcation} />
+      {/* <Notification showNotification={showNotifcation} /> */}
     </>
   );
 };
