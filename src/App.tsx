@@ -35,6 +35,7 @@ const App = () => {
 
   useEffect(() => {
     loadWords();
+    inputRef.current?.focus();
   }, []);
 
   const processLetter = useCallback(
@@ -66,7 +67,6 @@ const App = () => {
     };
 
     window.addEventListener("keydown", handleKeydown);
-    inputRef.current?.focus();
 
     return () => window.removeEventListener("keydown", handleKeydown);
   }, [playable, processLetter]);
@@ -77,6 +77,7 @@ const App = () => {
     setPlayable(true);
     setCorrectLetters([]);
     setWrongLetters([]);
+    inputRef.current?.focus();
 
     const random = Math.floor(Math.random() * words.length);
     const newCountry = words[random];
