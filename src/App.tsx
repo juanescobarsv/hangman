@@ -35,7 +35,6 @@ const App = () => {
 
   useEffect(() => {
     loadWords();
-    inputRef.current?.focus();
   }, []);
 
   const processLetter = useCallback(
@@ -87,6 +86,10 @@ const App = () => {
     // TO BE USED LATER WHEN SELECTING CONTINENTS
     setFlag(newCountry.flag);
   }
+
+  useEffect(() => {
+    inputRef.current?.focus();
+  }, []);
 
   return (
     <>
